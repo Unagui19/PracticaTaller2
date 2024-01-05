@@ -25,7 +25,8 @@ namespace Entidades
         }
 
         public List<Cadete> CargarCadetes(){
-            List<Cadete> cadetes = AccesoADatos.GetCadetes("Cadetes.CSV");
+            AccesoADatos data = new AccesoADatos();
+            List<Cadete> cadetes = data.GetCadetes("ManejoDeDatos/Cadetes.CSV");
             return cadetes;
         }
 
@@ -46,7 +47,18 @@ namespace Entidades
             return cadete;
         }
         public Cadete BuscarCadetePorNroDePedido(int nroPedido){
-            Cadete cadete = Cadetes.FirstOrDefault(cad => cad.BuscarPedido(nroPedido).Nro == nroPedido);
+            Cadete cadete= new Cadete();
+            foreach (var aux in Cadetes)
+            {
+                foreach (var pedido in aux.Pedidos)
+                {
+                    if (pedido.Nro==nroPedido)
+                    {
+                        cadete=aux;
+                        break;
+                    }
+                }
+            }
             return cadete;
         }
 
@@ -68,6 +80,25 @@ namespace Entidades
             pedido.CambiarEstado(2);
         }
         
+        public void CambiarEstado(int estado, int numeroPedido){
+            Cadete cadete = BuscarCadetePorNroDePedido(numeroPedido);
+            if (cadete!=null)
+            {
+                Pedido pedido = cadete.BuscarPedido(numeroPedido);
+                if (pedido != null)
+                {
+                    pedido.CambiarEstado(estado);                
+                }
+                else
+                {
+                    Console.WriteLine("Pedido inexistente");
+                }
+            }
+            else
+            {
+                Console.WriteLine("No existe cadete con ese pedido asignado");
+            }
+        }
         
     }
 }

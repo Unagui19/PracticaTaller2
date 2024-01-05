@@ -2,9 +2,9 @@ using Entidades;
 
 namespace ManejoDatos
 {
-    public static class AccesoADatos
+    public class AccesoADatos
     {   
-        public static List<Cadete> GetCadetes(string route){
+        public List<Cadete> GetCadetes(string route){
             List<Cadete> cadetes = new List<Cadete>();
             
             var csv = new FileStream(route,FileMode.Open);
@@ -20,7 +20,7 @@ namespace ManejoDatos
             return cadetes;
         }        
 
-        public static Cadeteria GetCadeteria(string route){
+        public  Cadeteria GetCadeteria(string route){
             Cadeteria cadeteria = new Cadeteria();
             
             var csv = new FileStream(route,FileMode.Open);
@@ -36,7 +36,7 @@ namespace ManejoDatos
             csv.Close();
             return cadeteria;
         }      
-        public static void GenerarInforme(Cadeteria cadeteria)//genera un archivo .csv
+        public  void GenerarInforme(Cadeteria cadeteria)//genera un archivo .csv
         {
             FileStream fs = new FileStream("Informe.csv", FileMode.Create);
             using (StreamWriter writer = new StreamWriter(fs))

@@ -50,7 +50,7 @@ namespace Entidades
                 break; 
                 case 2: Estado = Estado.asignado;
                 break ;
-                case 3: Estado = Estado.pendiente;
+                case 3: Estado = Estado.entregado;
                 break ;
                 default: Estado = Estado.cancelado;
                 break;

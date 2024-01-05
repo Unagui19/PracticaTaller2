@@ -51,7 +51,7 @@ namespace Entidades
         }
 
 
-        public Pedido BuscarPedido(int nroPedido){
+        public Pedido BuscarPedido(int? nroPedido){
             Pedido pedido = pedidos.FirstOrDefault(ped => ped.Nro == nroPedido);
             return pedido;
         }

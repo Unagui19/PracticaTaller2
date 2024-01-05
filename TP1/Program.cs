@@ -3,16 +3,16 @@ using Entidades;
 using ManejoDatos;
 
 int repetir=1;
-Cadeteria cadeteria = AccesoADatos.GetCadeteria("ManejoDeDatos/Cadeteria.CSV");
+AccesoADatos data = new AccesoADatos();
+Cadeteria cadeteria = data.GetCadeteria("ManejoDeDatos/Cadeteria.CSV");
 
 while (repetir==1)
 {
     Console.WriteLine("\t--------Bienvenido---------\n");
     Console.WriteLine("Seleccione la opcion deseada: \n");
     Console.WriteLine("1- Dar de alta el pedido");
-    Console.WriteLine("2- Asignar Cadete para un pedido");
-    Console.WriteLine("3- Cambiar estado de pedido");
-    Console.WriteLine("4- Reasignar pedido a otro cadete\n");
+    Console.WriteLine("2- Cambiar estado de pedido");
+    Console.WriteLine("3- Reasignar pedido a otro cadete\n");
     int opcion;
     string z = Console.ReadLine();
     bool ingreso1 = int.TryParse(z, out opcion);
@@ -41,38 +41,37 @@ while (repetir==1)
         string obsPedido = Console.ReadLine();
 
         Pedido pedido = new Pedido(nombreCliente,direccionCliente,telCliente, datosRefCliente,obsPedido);
-    }
 
         //--------------DAR DE ALTA PEDIDO--------------
-    else if(opcion == 2) {
         Console.WriteLine("\n---Alta Pedido---\n");
         Console.WriteLine("Id de cadete a asignarle el pedido: ");
         int idCadete;
         string z2 = Console.ReadLine();
-        bool ingreso2 = int.TryParse(z, out idCadete);
+        bool ingreso2 = int.TryParse(z2, out idCadete);
 
         while ( !ingreso2 )
         {
             Console.WriteLine("\nIngreso una valor invalido. Vuelva a intentarlo:");
             z2 = Console.ReadLine();
             ingreso2 = int.TryParse(z2, out idCadete);
-        }
+        } 
+        cadeteria.AsignarPedidoACadete(pedido,idCadete);
 
-        Console.WriteLine("Numero de Pedido que se va a asignar: ");
-        int nroPedido;
-        string n = Console.ReadLine();
-        bool ingreso22 = int.TryParse(z, out nroPedido);
+        // Console.WriteLine("Numero de Pedido que se va a asignar: ");
+        // int nroPedido;
+        // string n = Console.ReadLine();
+        // bool ingreso22 = int.TryParse(z, out nroPedido);
 
-        while ( !ingreso22 )
-        {
-            Console.WriteLine("\nIngreso una valor invalido. Vuelva a intentarlo:");
-            n = Console.ReadLine();
-            ingreso22 = int.TryParse(n, out nroPedido);
-        }
+        // while ( !ingreso22 )
+        // {
+        //     Console.WriteLine("\nIngreso una valor invalido. Vuelva a intentarlo:");
+        //     n = Console.ReadLine();
+        //     ingreso22 = int.TryParse(n, out nroPedido);
+        // }
         Console.WriteLine("Pedido agregado con exito");
     }
     //--------------CAMBIAR ESTADO--------------
-    else if(opcion == 3){
+    else if(opcion == 2){
         Console.WriteLine("\t-----Cambiar estado de pedido-----\n");
         Console.WriteLine("Numero de pedido al que se le quiere cambiar su estado: ");
         int pedidoCambioE;
@@ -103,6 +102,8 @@ while (repetir==1)
             ingreso32 = int.TryParse(n, out estado);
         }
 
+        cadeteria.CambiarEstado(estado,pedidoCambioE);
+
         Console.WriteLine("Cambio de estado exitoso");
     }
     
@@ -127,7 +128,7 @@ while (repetir==1)
         Console.WriteLine("Id del cadete a quien se le va a asignar el pedio: ");
         int idCadete4;
         string n2 = Console.ReadLine();
-        bool ingreso42 = int.TryParse(z, out idCadete4);
+        bool ingreso42 = int.TryParse(n2, out idCadete4);
 
         while ( !ingreso42 )
         {
@@ -135,6 +136,7 @@ while (repetir==1)
             n2 = Console.ReadLine();
             ingreso42 = int.TryParse(n, out idCadete4);
         }
+        cadeteria.ReasignarPedido(idCadete4,pedidoReasig);
         Console.WriteLine("Pedido reasigando con exito");
     }
     Console.WriteLine("Limpio");
@@ -160,5 +162,5 @@ while (repetir==1)
     }
 }
 
-AccesoADatos.GenerarInforme(cadeteria);
+data.GenerarInforme(cadeteria);
 
