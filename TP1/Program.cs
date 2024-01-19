@@ -63,17 +63,6 @@ while (repetir==1)
         } 
         cadeteria.AsignarPedidoACadete(pedido,idCadete);
 
-        // Console.WriteLine("Numero de Pedido que se va a asignar: ");
-        // int nroPedido;
-        // string n = Console.ReadLine();
-        // bool ingreso22 = int.TryParse(z, out nroPedido);
-
-        // while ( !ingreso22 )
-        // {
-        //     Console.WriteLine("\nIngreso una valor invalido. Vuelva a intentarlo:");
-        //     n = Console.ReadLine();
-        //     ingreso22 = int.TryParse(n, out nroPedido);
-        // }
         Console.WriteLine("Pedido agregado con exito");
     }
     //--------------CAMBIAR ESTADO--------------
