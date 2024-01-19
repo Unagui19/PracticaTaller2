@@ -3,11 +3,11 @@ using Entidades;
 
 namespace Entidades
 {
-    public enum Estado {pendiente = 1, asignado = 2, entregado = 3, cancelado = 4}
+    public enum Estado {pendiente = 1, asignado = 2, entregado = 3}//, cancelado = 4}
     public class Pedido
     {
 
-        static int id=0;
+        public static int id=0;
         public int Nro { get ; set; }
         public string Obs { get ; set; }
         public Estado Estado { get ; set; }
@@ -52,8 +52,8 @@ namespace Entidades
                 break ;
                 case 3: Estado = Estado.entregado;
                 break ;
-                default: Estado = Estado.cancelado;
-                break;
+                // default: Estado = Estado.cancelado;
+                // break;
             }
         }
 

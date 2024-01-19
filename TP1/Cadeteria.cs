@@ -21,14 +21,19 @@ namespace Entidades
         {
             Nombre = nombre;
             Telefono = telefono;
-            Cadetes = CargarCadetes();
+            Cadetes = new List<Cadete>();
         }
 
-        public List<Cadete> CargarCadetes(){
-            AccesoADatos data = new AccesoADatos();
-            List<Cadete> cadetes = data.GetCadetes("ManejoDeDatos/Cadetes.CSV");
-            return cadetes;
-        }
+        // public List<Cadete> CargarCadetes(){
+        //     List<Cadete> cadetes = data.GetCadetes("ManejoDeDatos/Cadetes.CSV");
+        //     return cadetes;
+        // }
+
+        public void Mostrar(){
+            Console.WriteLine($"\n Cadeteria : {Nombre}\n");
+            Console.WriteLine($"Telefono : {Telefono}\n");
+            Console.WriteLine($"Cantidad de cadetes activos : {Cadetes.Count()}\n");
+        }   
 
         public Pedido CrearPedido(string obs, string nombreCliente, string DireccionCliente, string TelefonoCliente, string DatosReferenciaDireccion){
 
@@ -39,28 +44,58 @@ namespace Entidades
 
         public void AsignarPedidoACadete(Pedido pedido, int idCadete){
             Cadete cadete = BuscarCadetePorId(idCadete);
-            cadete.AgregarPedido(pedido);
+            if (cadete!=null)
+            {
+                cadete.AgregarPedido(pedido);            
+            }
         }
 
         public Cadete BuscarCadetePorId(int idCadete){
             Cadete cadete = Cadetes.FirstOrDefault(cad => cad.Id == idCadete);
-            return cadete;
-        }
-        public Cadete BuscarCadetePorNroDePedido(int nroPedido){
-            Cadete cadete= new Cadete();
-            foreach (var aux in Cadetes)
+            if (cadete!=null)
             {
-                foreach (var pedido in aux.Pedidos)
+                return cadete;            
+            }
+            else
+            {
+                return null;
+            }
+        }
+
+        public Cadete BuscarCadetePorNroDePedido(int nroPedido){
+        foreach (var cadete in Cadetes)
+        {
+            foreach (var pedido in cadete.Pedidos)
+            {
+                if (pedido != null && pedido.Nro == nroPedido)
                 {
-                    if (pedido.Nro==nroPedido)
-                    {
-                        cadete=aux;
-                        break;
-                    }
+                    return cadete;
                 }
             }
-            return cadete;
         }
+        
+        Console.WriteLine("No se encontró ningún cadete con ese número de pedido.");
+        return null;
+    }
+        // public Cadete BuscarCadetePorNroDePedido(int nroPedido){
+        //     Cadete cadete= new Cadete();
+        //     foreach (var aux in Cadetes)
+        //     {
+        //         foreach (var pedido in aux.Pedidos)
+        //         {
+        //             if (pedido!=null){
+        //                 if(pedido.Nro==nroPedido){
+        //                     cadete=aux;
+        //                     break;
+        //                 }
+        //             } 
+        //             else{
+        //                 Console.WriteLine("No hay pedidos asignados");                        
+        //             }
+        //         }
+        //     }
+        //     return cadete;
+        // }
 
         public void ConfirmarEntrega(int nroPedido){
             Cadete cadete = Cadetes.FirstOrDefault(cad => cad.BuscarPedido(nroPedido).Nro == nroPedido);
@@ -75,19 +110,33 @@ namespace Entidades
             cadeteAnterior.QuitarPedido(aux);
         }
 
-        public void CancelarPedido(Pedido pedido){
-            Cadete cadete = BuscarCadetePorNroDePedido(pedido.Nro);
-            pedido.CambiarEstado(2);
-        }
+        // public void CancelarPedido(int nroPedido){
+        //     // Cadete cadete = BuscarCadetePorNroDePedido(nroPedido);
+        //     Pedido pedido = cadete.BuscarPedido(nroPedido);
+        //     EliminarPedido(pedido);
+        // }
+        // public void CancelarPedido(int nroPedido){ //es eliminar pedido
+        //     Cadete cadete = BuscarCadetePorNroDePedido(nroPedido);
+        //     Pedido pedido = cadete.BuscarPedido(nroPedido); 
+        //     if(pedido!=null){
+        //         cadete.QuitarPedido(pedido);
+        //     }
+        // }
         
         public void CambiarEstado(int estado, int numeroPedido){
             Cadete cadete = BuscarCadetePorNroDePedido(numeroPedido);
             if (cadete!=null)
-            {
+            {                    
                 Pedido pedido = cadete.BuscarPedido(numeroPedido);
                 if (pedido != null)
                 {
-                    pedido.CambiarEstado(estado);                
+                    if (estado == 4)
+                    {
+                        cadete.QuitarPedido(pedido);
+                    }
+                    else{
+                        pedido.CambiarEstado(estado);                
+                    }
                 }
                 else
                 {

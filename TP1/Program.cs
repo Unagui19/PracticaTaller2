@@ -1,11 +1,14 @@
 ﻿using System.Runtime.CompilerServices;
+using System.Linq;
 using Entidades;
 using ManejoDatos;
+using System.Collections;
 
 int repetir=1;
 AccesoADatos data = new AccesoADatos();
 Cadeteria cadeteria = data.GetCadeteria("ManejoDeDatos/Cadeteria.CSV");
-
+List<Cadete> cadetes = data.GetCadetes("ManejoDeDatos/Cadetes.CSV");
+cadeteria.Cadetes=cadetes;
 while (repetir==1)
 {
     Console.WriteLine("\t--------Bienvenido---------\n");
@@ -13,6 +16,7 @@ while (repetir==1)
     Console.WriteLine("1- Dar de alta el pedido");
     Console.WriteLine("2- Cambiar estado de pedido");
     Console.WriteLine("3- Reasignar pedido a otro cadete\n");
+    Console.WriteLine("3- Mostrar listado de cadetes\n");
     int opcion;
     string z = Console.ReadLine();
     bool ingreso1 = int.TryParse(z, out opcion);
@@ -24,7 +28,7 @@ while (repetir==1)
         ingreso1 = int.TryParse(z, out opcion);
     }
 
-    Console.Clear();
+    // Console.Clear();
 
     if (opcion==1)
     {
@@ -40,8 +44,10 @@ while (repetir==1)
         Console.WriteLine("\nAlguna observacion?: ");
         string obsPedido = Console.ReadLine();
 
-        Pedido pedido = new Pedido(nombreCliente,direccionCliente,telCliente, datosRefCliente,obsPedido);
-
+        Pedido pedido = cadeteria.CrearPedido(nombreCliente,direccionCliente,telCliente, datosRefCliente,obsPedido);
+        Console.WriteLine("pedido: ");
+        Console.WriteLine(pedido.Nro);
+        Console.WriteLine(pedido.Cliente);
         //--------------DAR DE ALTA PEDIDO--------------
         Console.WriteLine("\n---Alta Pedido---\n");
         Console.WriteLine("Id de cadete a asignarle el pedido: ");
@@ -75,14 +81,14 @@ while (repetir==1)
         Console.WriteLine("\t-----Cambiar estado de pedido-----\n");
         Console.WriteLine("Numero de pedido al que se le quiere cambiar su estado: ");
         int pedidoCambioE;
-        string n = Console.ReadLine();
-        bool ingreso3 = int.TryParse(z, out pedidoCambioE);
+        string e1 = Console.ReadLine();
+        bool ingreso3 = int.TryParse(e1, out pedidoCambioE);
 
         while ( !ingreso3 )
         {
             Console.WriteLine("\nIngreso una valor invalido. Vuelva a intentarlo:");
-            n = Console.ReadLine();
-            ingreso3 = int.TryParse(n, out pedidoCambioE);
+            e1 = Console.ReadLine();
+            ingreso3 = int.TryParse(e1, out pedidoCambioE);
         }
         Console.WriteLine("\n");
         Console.WriteLine("Cambiar estado del pedido a: \n");
@@ -92,14 +98,14 @@ while (repetir==1)
         Console.WriteLine("4- Cancelado\n");
 
         int estado;
-        string e = Console.ReadLine();
-        bool ingreso32 = int.TryParse(e, out estado);
+        string e2 = Console.ReadLine();
+        bool ingreso32 = int.TryParse(e2, out estado);
 
         while ( !ingreso32 || estado >4 || estado <1 )
         {
             Console.WriteLine("\nIngreso una valor invalido. Vuelva a intentarlo:");
-            e = Console.ReadLine();
-            ingreso32 = int.TryParse(n, out estado);
+            e2 = Console.ReadLine();
+            ingreso32 = int.TryParse(e2, out estado);
         }
 
         cadeteria.CambiarEstado(estado,pedidoCambioE);
@@ -109,7 +115,7 @@ while (repetir==1)
     
         //--------------REASIGNAR PEDIDO--------------
 
-    else{
+    else if(opcion == 3){
         Console.WriteLine("\t---Reasignar pedido---\n");
 
 
@@ -134,10 +140,17 @@ while (repetir==1)
         {
             Console.WriteLine("\nIngreso una valor invalido. Vuelva a intentarlo:");
             n2 = Console.ReadLine();
-            ingreso42 = int.TryParse(n, out idCadete4);
+            ingreso42 = int.TryParse(n2, out idCadete4);
         }
         cadeteria.ReasignarPedido(idCadete4,pedidoReasig);
         Console.WriteLine("Pedido reasigando con exito");
+    }
+    else{
+        Console.WriteLine("\t---Listado de cadetes---\n");
+        foreach (var item in cadetes)
+        {
+            item.MostrarInfo();
+        }
     }
     Console.WriteLine("Limpio");
     Console.WriteLine("Desea realizar otra accion?\n");
@@ -162,5 +175,20 @@ while (repetir==1)
     }
 }
 
-data.GenerarInforme(cadeteria);
+//-------INFORME-----
+
+int pedidosTot = 0;
+Console.WriteLine("\n\t---INFORME---\n");
+foreach (var cadete in cadetes)
+{
+    Console.WriteLine($"CADETE: {cadete.Nombre}\n");
+    Console.WriteLine($"Cantidad de pedidos realizados: {cadete.Pedidos.Count()}\n");
+    Console.WriteLine($"Monto ganado: {cadete.JornalACobrar()}\n");
+    pedidosTot+=cadete.Pedidos.Count();
+}
+Console.WriteLine($"Cantidad de pedidos totales: {pedidosTot}\n");
+Console.WriteLine($"Cantidad de cadetes: {cadeteria.Cadetes.Count()}\n");
+float envPromedio = pedidosTot/cadeteria.Cadetes.Count();
+Console.WriteLine($"\n\tCantidad de envios promedio por cadete: {envPromedio}");
+// data.GenerarInforme(cadeteria);
 
