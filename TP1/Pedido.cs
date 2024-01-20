@@ -50,10 +50,21 @@ namespace Entidades
                 case 2: Estado = Estado.asignado;
                 break ;
                 case 3: Estado = Estado.entregado;
+                        cadete.pedidoEntregado();
                 break ;
                 // default: Estado = Estado.cancelado;
                 // break;
             }
+        }
+
+        public void AsignarCadete(Cadete cadete){
+            this.cadete=cadete;
+            CambiarEstado(1);
+        }
+
+        public void DesasignarCadete(){
+            this.cadete=null;
+            CambiarEstado(2);
         }
 
         

@@ -23,6 +23,7 @@ namespace Entidades
             Nombre = nombre;
             Telefono = telefono;
             Cadetes = new List<Cadete>();
+            ListadoPedidos = new List<Pedido>();
         }
 
 
@@ -38,11 +39,15 @@ namespace Entidades
         }
 
 
-        public void AsignarCadeteAPedido(Pedido pedido, int idCadete){
+        public void AsignarCadeteAPedido(int nroPedido, int idCadete){
             Cadete cadete = BuscarCadetePorId(idCadete);
             if (cadete!=null)
             {
-                           
+                Pedido pedido = BuscarPedido(nroPedido);
+                if (pedido!=null)
+                {
+                    pedido.AsignarCadete(cadete);
+                }
             }
         }
 
@@ -58,58 +63,50 @@ namespace Entidades
             }
         }
 
-        public Cadete BuscarCadetePorNroDePedido(int nroPedido){
-        foreach (var cadete in Cadetes)
-        {
-            foreach (var pedido in cadete.Pedidos)
+
+        public void ConfirmarEntrega(Pedido pedido){
+            if (pedido.cadete!=null)
             {
-                if (pedido != null && pedido.Nro == nroPedido)
-                {
-                    return cadete;
-                }
+                pedido.CambiarEstado(3);                
             }
-        }
-        return null;
-    }
-
-
-        public void ConfirmarEntrega(int nroPedido){
-            Cadete cadete = Cadetes.FirstOrDefault(cad => cad.BuscarPedido(nroPedido).Nro == nroPedido);
-            Pedido pedido = cadete.BuscarPedido(nroPedido);
-            pedido.CambiarEstado(3);
+            else
+            {
+                Console.WriteLine("No existe el pedido o no hay cadete asignado al mismo");
+            }
         }
 
         public void ReasignarPedido(int idCadete, int numeroPedido){
-            Cadete cadeteAnterior = BuscarCadetePorNroDePedido(numeroPedido);
-            Pedido aux = cadeteAnterior.BuscarPedido(numeroPedido); 
-            AsignarPedidoACadete(aux,idCadete);
-            cadeteAnterior.QuitarPedido(aux);
+            Pedido pedido = BuscarPedido(numeroPedido);
+            pedido.DesasignarCadete();
+            pedido.AsignarCadete(BuscarCadetePorId(idCadete));
         }
 
 
         
         public void CambiarEstado(int estado, int numeroPedido){
-            Cadete cadete = BuscarCadetePorNroDePedido(numeroPedido);
-            if (cadete!=null)
-            {                    
-                Pedido pedido = cadete.BuscarPedido(numeroPedido);
+            Pedido pedido = BuscarPedido(numeroPedido);
+
                 if (pedido != null)
                 {
                     if (estado == 4)
                     {
-                        cadete.QuitarPedido(pedido);
+                        ListadoPedidos.Remove(pedido);
+                    }
+                    else if(estado == 3){
+                        ConfirmarEntrega(pedido);
                     }
                     else{
                         pedido.CambiarEstado(estado);                
                     }
                 }
-
-            }
-
+                else
+                {
+                    Console.WriteLine("Pedido inexistente");
+                }
         }
 
         public Pedido BuscarPedido(int nroPedido){
-            Pedido pedido = ListadoPedidos.First(ped => ped.Nro == nroPedido);
+            Pedido pedido = ListadoPedidos.FirstOrDefault(ped => ped.Nro == nroPedido);
             if (pedido != null)
             {
                 return pedido;            
@@ -117,6 +114,19 @@ namespace Entidades
             else{
                 return null;
             }
+        }
+
+        public double JornalACobrar(int idCadete){
+            int jornal=0;
+            Cadete cadete = BuscarCadetePorId(idCadete);
+            foreach (var item in ListadoPedidos)
+            {
+                if (item.Estado==Estado.entregado && item.cadete==cadete)
+                {
+                    jornal+=500;
+                }
+            }
+            return jornal;
         }
         
     }
