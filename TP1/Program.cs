@@ -44,10 +44,7 @@ while (repetir==1)
         Console.WriteLine("\nAlguna observacion?: ");
         string obsPedido = Console.ReadLine();
 
-        Pedido pedido = cadeteria.CrearPedido(nombreCliente,direccionCliente,telCliente, datosRefCliente,obsPedido);
-        Console.WriteLine("pedido: ");
-        Console.WriteLine(pedido.Nro);
-        Console.WriteLine(pedido.Cliente);
+        
         //--------------DAR DE ALTA PEDIDO--------------
         Console.WriteLine("\n---Alta Pedido---\n");
         Console.WriteLine("Id de cadete a asignarle el pedido: ");
@@ -61,7 +58,11 @@ while (repetir==1)
             z2 = Console.ReadLine();
             ingreso2 = int.TryParse(z2, out idCadete);
         } 
-        cadeteria.AsignarPedidoACadete(pedido,idCadete);
+
+        cadeteria.CrearPedido(nombreCliente,direccionCliente,telCliente, datosRefCliente,obsPedido);
+        Console.WriteLine("pedido: ");
+        Console.WriteLine(pedido.Nro);
+        Console.WriteLine(pedido.Cliente);
 
         Console.WriteLine("Pedido agregado con exito");
     }

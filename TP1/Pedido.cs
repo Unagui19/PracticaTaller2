@@ -12,6 +12,7 @@ namespace Entidades
         public string Obs { get ; set; }
         public Estado Estado { get ; set; }
         public Cliente Cliente { get ; set; }
+        public Cadete cadete {get; set;}
 
         public Pedido(string obs, string nombreCliente, string DireccionCliente, string TelefonoCliente, string DatosReferenciaDireccion)
         {
@@ -32,15 +33,13 @@ namespace Entidades
             Cliente = cliente;
         }
 
-        public void verDireccionCliente(){
-            Console.WriteLine("Direccion del cliente ",Cliente.Direccion);
+        public string verDireccionCliente(){
+            return Cliente.Direccion;
         }
 
-        public void verDatosCliente(){
-            Console.WriteLine("Nombre del cliente ",Cliente.Nombre);
-            Console.WriteLine("Direccion del cliente ",Cliente.Direccion);
-            Console.WriteLine("Telefono del cliente ",Cliente.Telefono);
-            Console.WriteLine("Datos de referencia de la direccion ",Cliente.DatosReferenciaDireccion);
+        public string verDatosCliente(){
+            return Cliente.Nombre + "-" + Cliente.Telefono
+             + "-" + Cliente.Direccion + "-" + Cliente.DatosReferenciaDireccion; 
         }
 
         public void CambiarEstado(int est){
