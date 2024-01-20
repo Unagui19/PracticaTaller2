@@ -3,11 +3,13 @@ using System.Linq;
 using Entidades;
 using ManejoDatos;
 using System.Collections;
+using EspacioAccesoData;
 
 int repetir=1;
-AccesoADatos data = new AccesoADatos();
-Cadeteria cadeteria = data.GetCadeteria("ManejoDeDatos/Cadeteria.CSV");
-List<Cadete> cadetes = data.GetCadetes("ManejoDeDatos/Cadetes.CSV");
+AccesoADatos dataCSV = new AccesoCSV();
+AccesoADatos dataJSON = new AccesoJson();
+Cadeteria cadeteria = dataCSV.GetCadeteria("ManejoDeDatos/Cadeteria.CSV");
+List<Cadete> cadetes = dataCSV.GetCadetes("ManejoDeDatos/Cadetes.CSV");
 cadeteria.Cadetes=cadetes;
 while (repetir==1)
 {
@@ -56,7 +58,7 @@ while (repetir==1)
         string z2 = Console.ReadLine();
         bool ingreso2 = int.TryParse(z2, out idCadete);
 
-        while ( !ingreso2 )
+        while ( !ingreso2 || opcion < 1 || opcion >6)
         {
             Console.WriteLine("\nIngreso una valor invalido. Vuelva a intentarlo:");
             z2 = Console.ReadLine();
@@ -73,7 +75,7 @@ while (repetir==1)
         string e1 = Console.ReadLine();
         bool ingreso3 = int.TryParse(e1, out pedidoCambioE);
 
-        while ( !ingreso3  && cadeteria.BuscarPedido(pedidoCambioE)==null)
+        while ( !ingreso3  || cadeteria.BuscarPedido(pedidoCambioE)==null)
         {
             Console.WriteLine("\nIngreso una valor invalido. Vuelva a intentarlo:");
             e1 = Console.ReadLine();
