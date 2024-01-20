@@ -58,7 +58,7 @@ while (repetir==1)
         string z2 = Console.ReadLine();
         bool ingreso2 = int.TryParse(z2, out idCadete);
 
-        while ( !ingreso2 || opcion < 1 || opcion >6)
+        while ( !ingreso2 || idCadete < 1 || idCadete >6)
         {
             Console.WriteLine("\nIngreso una valor invalido. Vuelva a intentarlo:");
             z2 = Console.ReadLine();
