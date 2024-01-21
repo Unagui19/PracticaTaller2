@@ -69,10 +69,6 @@ namespace Entidades
             {
                 pedido.CambiarEstado(3);                
             }
-            else
-            {
-                Console.WriteLine("No existe el pedido o no hay cadete asignado al mismo");
-            }
         }
 
         public void ReasignarPedido(int idCadete, int numeroPedido){
@@ -98,10 +94,6 @@ namespace Entidades
                     else{
                         pedido.CambiarEstado(estado);                
                     }
-                }
-                else
-                {
-                    Console.WriteLine("Pedido inexistente");
                 }
         }
 
